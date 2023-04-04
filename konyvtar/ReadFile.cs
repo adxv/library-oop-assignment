@@ -40,6 +40,11 @@ namespace konyvtar
                 Console.WriteLine("The file could not be read: books.txt");
                 Console.WriteLine(e.Message);
             }
+            Dictionary<int, Book> booksDictionary = new Dictionary<int, Book>();
+            foreach (Book book in Library.books)
+            {
+                booksDictionary.Add(book.Id, book);
+            }
 
             try
             {
@@ -49,7 +54,27 @@ namespace konyvtar
                     string line;
                     while ((line = sr.ReadLine()) != null)
                     {
-                        Console.WriteLine(line);
+                        string[] fields = line.Split(';');
+                        int memberId = int.Parse(fields[0]);
+                        string memberName = fields[1];
+                        List<Book> booksBorrowed = new List<Book>();
+                        if(fields.Length > 2)
+                        {
+                            string[] bookIds = fields[2].Split(',');
+                            foreach(string bookId in bookIds)
+                            {
+                                if(int.TryParse(bookId, out int id))
+                                {
+                                    if (booksDictionary.TryGetValue(id, out Book book))
+                                    {
+                                        booksBorrowed.Add(book);
+                                    }
+                                }
+                            }
+                        }
+
+                        Member member = new Member(memberId, memberName, booksBorrowed);
+                        Library.members.Add(member);
                     }
                 }
             }

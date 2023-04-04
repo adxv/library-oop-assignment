@@ -13,13 +13,14 @@ namespace konyvtar
         {
 
             //menu
+            
             ReadFile reader = new ReadFile();
             WriteFile writer = new WriteFile();
             reader.ReadFromFile();
 
             BorrowReturn br = new BorrowReturn();
 
-        
+            HELP:
             Console.WriteLine("_________________________________________");
             Console.WriteLine();
             Console.WriteLine("1. Obtain a new book");
@@ -29,25 +30,29 @@ namespace konyvtar
             Console.WriteLine("5. List books");
             Console.WriteLine("6. List available books");
             Console.WriteLine("7. List members");
-            Console.WriteLine("8. Check status of a member");
+            Console.WriteLine("8. Check what books you currently have!");
             Console.WriteLine("9. Remove a book");
             Console.WriteLine("10. Exit");
             Console.WriteLine("_________________________________________");
             REPICK:
             Console.WriteLine();
-            Console.WriteLine("Please choose from the options above!");
+            Console.WriteLine("Please choose from the options above or type 'help' for instructions!");
             Console.WriteLine();
-            int action = 0;
-            bool ok = int.TryParse(Console.ReadLine(), out action);
-            if (!ok || action < 1 || action > 10) { Console.WriteLine("You've input an incorrect number! Please choose from the options above!"); goto REPICK; }
+            string prompt = Console.ReadLine();
+            
+            if (prompt == "help") { goto HELP; }
+            bool ok = int.TryParse(prompt, out int action);
+            if (!ok || action < 1 || action > 10) { goto REPICK; }
             if (action == 10) { return; }
 
             //TODO:
                 //MAKE ID AUTOMATIC
-                //STORE MEMBERS IN FILE
-                //ASSIGN BOOKS TO MEMBERS
                 //WRITE OUT SURCHARGE WHEN CHECKING STATUS
 
+
+            //DONE
+                //ASSIGN BOOKS TO MEMBERS
+                //STORE MEMBERS IN FILE
 
             //newbook
             if (action == 1)
@@ -91,7 +96,8 @@ namespace konyvtar
                 int id = int.Parse(Console.ReadLine());
                 Console.WriteLine("Please enter the Name!");
                 string name = Console.ReadLine();
-                Library.members.Add(new Member(id, name));
+                Library.members.Add(new Member(id, name, new List<Book>()));
+                writer.WriteUserToFile(new Member(id, name, new List<Book>()));
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
                 goto REPICK;
@@ -102,10 +108,11 @@ namespace konyvtar
                 Console.WriteLine("You have chosen to borrow a book!");
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
+                Console.WriteLine("Please enter your member ID!");
+                int memberid = int.Parse(Console.ReadLine());
                 Console.WriteLine("Enter the ID of the book to borrow!");
-                int id = int.Parse(Console.ReadLine());
-                br.BorrowBook(id);
-                Console.WriteLine("You have borrowed the book with the id: {0}",id);
+                int bookid = int.Parse(Console.ReadLine());
+                br.BorrowBook(memberid, bookid);
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
                 goto REPICK;
@@ -116,10 +123,11 @@ namespace konyvtar
                 Console.WriteLine("You have chosen to return a book!");
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
+                Console.WriteLine("Please enter your member ID!");
+                int memberid = int.Parse(Console.ReadLine());
                 Console.WriteLine("Enter the ID of the book to return!");
-                int id = int.Parse(Console.ReadLine());
-                br.ReturnBook(id);
-                Console.WriteLine("You have returned the book with the id: {0}", id);
+                int bookid = int.Parse(Console.ReadLine());
+                br.ReturnBook(memberid, bookid);
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
                 goto REPICK;
@@ -172,8 +180,7 @@ namespace konyvtar
 
                 foreach (var members in Library.members)
                 {
-                    Console.WriteLine("id: {0}, name: {1}, books borrowed: {}", members.Id, members.Name);
-                    //TODO
+                    Console.WriteLine("id: {0}, name: {1}", members.Id, members.Name);
                 }
 
                 Console.WriteLine("_________________________________________");
@@ -184,12 +191,20 @@ namespace konyvtar
             //check status of a member
             if(action == 8)
             {
-                Console.WriteLine("You have chosen to check the status of a member!");
+                Console.WriteLine("You have chosen to check what books you currently have!");
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
-
-                //TODO
-
+                Console.WriteLine("Please enter your member ID!");
+                int memberid = int.Parse(Console.ReadLine());
+                Member member = Library.members.Find(x => x.Id == memberid);
+                foreach (Book book in  member.BooksBorrowed)
+                {
+                    Console.WriteLine("Lib-ID: {0}, Title: {1}, Author: {2}", book.Id, book.Title, book.Author);
+                }
+                if(member.BooksBorrowed.Count == 0)
+                {
+                    Console.WriteLine("You don't have any books borrowed at this time.");
+                }
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
                 goto REPICK;

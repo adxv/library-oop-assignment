@@ -12,11 +12,11 @@ namespace konyvtar
         public string Name { get; set; }
         public List<Book> BooksBorrowed { get; set; }
 
-        public Member(int id, string name)
+        public Member(int id, string name, List<Book> booksBorrowed)
         {
             Id = id;
             Name = name;
-            BooksBorrowed = new List<Book>();
+            BooksBorrowed = booksBorrowed;
         }
     }
 }

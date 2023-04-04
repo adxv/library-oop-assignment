@@ -16,6 +16,23 @@ namespace konyvtar
                 sw.WriteLine($"{book.Id};{book.Title};{book.Author};{book.Publisher};{book.ISBN};{book.PageNumber};{book.Available};{book.Genre};{book.Rarity};");
             }
         }
+        public void WriteUserToFile(Member member)
+        {
+            using (StreamWriter sw = new StreamWriter("members.txt", true))
+            {
+                // Write the member's ID and Name to the file
+                sw.Write($"{member.Id};{member.Name};");
+
+                // Write the IDs of the member's borrowed books to the file
+                foreach (Book book in member.BooksBorrowed)
+                {
+                    sw.Write($"{book.Id},");
+                }
+
+                // Write a newline character to end the line
+                sw.WriteLine();
+            }
+        }
         public void RemoveBook(int id)
         {
             // Remove the book from the list
