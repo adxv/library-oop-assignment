@@ -20,12 +20,13 @@ namespace konyvtar
 
             BorrowReturn br = new BorrowReturn();
 
+
             HELP:
             Console.WriteLine("_________________________________________");
             Console.WriteLine();
             Console.WriteLine("1. Obtain a new book");
             Console.WriteLine("2. Sign up a new member");
-            Console.WriteLine("3. Borrow a book");
+            Console.WriteLine("3. Borrow book(s)");
             Console.WriteLine("4. Return a book");
             Console.WriteLine("5. List books");
             Console.WriteLine("6. List available books");
@@ -48,7 +49,6 @@ namespace konyvtar
             //TODO:
                 //MAKE ID AUTOMATIC
                 //WRITE OUT SURCHARGE WHEN CHECKING STATUS
-
 
             //DONE
                 //ASSIGN BOOKS TO MEMBERS
@@ -103,16 +103,20 @@ namespace konyvtar
                 goto REPICK;
             }
 
-            //borrow a book
+            //borrow book(s)
             if (action == 3) {
                 Console.WriteLine("You have chosen to borrow a book!");
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
                 Console.WriteLine("Please enter your member ID!");
                 int memberid = int.Parse(Console.ReadLine());
-                Console.WriteLine("Enter the ID of the book to borrow!");
-                int bookid = int.Parse(Console.ReadLine());
-                br.BorrowBook(memberid, bookid);
+                Console.WriteLine("Enter the ID(s) of the book(s) to borrow(up to 5 at a time)! E.g. '3' or '3,5'.");
+                string[] bookids = Console.ReadLine().Split(',');
+                if (bookids.Length > 5) { Console.WriteLine("You can only borrow up to 5 books at a time."); goto REPICK; }
+                for (int i = 0; i < bookids.Length;i++)
+                {
+                    br.BorrowBook(memberid, int.Parse(bookids[i]));
+                }
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
                 goto REPICK;
@@ -125,9 +129,12 @@ namespace konyvtar
                 Console.WriteLine();
                 Console.WriteLine("Please enter your member ID!");
                 int memberid = int.Parse(Console.ReadLine());
-                Console.WriteLine("Enter the ID of the book to return!");
-                int bookid = int.Parse(Console.ReadLine());
-                br.ReturnBook(memberid, bookid);
+                Console.WriteLine("Enter the ID(s) of the book(s) to return! E.G. '3' or '3,5'.");
+                string[] bookids = Console.ReadLine().Split(',');
+                for (int i = 0; i < bookids.Length; i++)
+                {
+                    br.ReturnBook(memberid, int.Parse(bookids[i]));
+                }
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
                 goto REPICK;
@@ -188,9 +195,10 @@ namespace konyvtar
                 goto REPICK;
             }
 
-            //check status of a member
+            //check borrowed
             if(action == 8)
             {
+                Price price = new Price();
                 Console.WriteLine("You have chosen to check what books you currently have!");
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
@@ -199,7 +207,7 @@ namespace konyvtar
                 Member member = Library.members.Find(x => x.Id == memberid);
                 foreach (Book book in  member.BooksBorrowed)
                 {
-                    Console.WriteLine("Lib-ID: {0}, Title: {1}, Author: {2}", book.Id, book.Title, book.Author);
+                    Console.WriteLine("Lib-ID: {0}, Title: {1}, Author: {2}, surcharge: {3}", book.Id, book.Title, book.Author, price.priceCheck(book.Id));
                 }
                 if(member.BooksBorrowed.Count == 0)
                 {

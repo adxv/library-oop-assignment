@@ -12,7 +12,7 @@ namespace konyvtar
         {
             //find the book with the specified ID
             Book bookToBorrow = Library.books.Find(book => book.Id == bookid);
-            Member borrowingMember = Library.members.Find(member => member.Id == member.Id);
+            Member borrowingMember = Library.members.Find(member => member.Id == memberid);
 
             if (bookToBorrow.Available)
             {
@@ -59,7 +59,7 @@ namespace konyvtar
         {
             //find the book with the specified ID
             Book bookToReturn = Library.books.Find(book => book.Id == bookid);
-            Member returnerMember = Library.members.Find(member => member.Id == member.Id);
+            Member returnerMember = Library.members.Find(member => member.Id == memberid);
 
             if(returnerMember.BooksBorrowed.Contains(bookToReturn)) {
 
