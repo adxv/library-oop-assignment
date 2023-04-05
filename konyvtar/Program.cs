@@ -19,6 +19,7 @@ namespace konyvtar
             reader.ReadFromFile();
 
             BorrowReturn br = new BorrowReturn();
+            Price price = new Price();
 
 
             HELP:
@@ -33,26 +34,29 @@ namespace konyvtar
             Console.WriteLine("7. List members");
             Console.WriteLine("8. Check what books you currently have!");
             Console.WriteLine("9. Remove a book");
-            Console.WriteLine("10. Exit");
+            Console.WriteLine("10. Information about the surcharge");
+            Console.WriteLine("11. or 'exit': Exit");
             Console.WriteLine("_________________________________________");
             REPICK:
-            Console.WriteLine();
             Console.WriteLine("Please choose from the options above or type 'help' for instructions!");
             Console.WriteLine();
             string prompt = Console.ReadLine();
             
             if (prompt == "help") { goto HELP; }
+            if (prompt == "exit") { return; }
             bool ok = int.TryParse(prompt, out int action);
-            if (!ok || action < 1 || action > 10) { goto REPICK; }
-            if (action == 10) { return; }
+            if (!ok || action < 1 || action > 11) { goto REPICK; }
+            if (action == 11) { return; }
 
             //TODO:
                 //MAKE ID AUTOMATIC
-                //WRITE OUT SURCHARGE WHEN CHECKING STATUS
+                
 
             //DONE
                 //ASSIGN BOOKS TO MEMBERS
                 //STORE MEMBERS IN FILE
+                //WRITE OUT SURCHARGE WHEN CHECKING STATUS
+                //WRITE OUT ACCORDING SURCHARGE WHEN RETURNING
 
             //newbook
             if (action == 1)
@@ -129,12 +133,14 @@ namespace konyvtar
                 Console.WriteLine();
                 Console.WriteLine("Please enter your member ID!");
                 int memberid = int.Parse(Console.ReadLine());
-                Console.WriteLine("Enter the ID(s) of the book(s) to return! E.G. '3' or '3,5'.");
-                string[] bookids = Console.ReadLine().Split(',');
-                for (int i = 0; i < bookids.Length; i++)
-                {
-                    br.ReturnBook(memberid, int.Parse(bookids[i]));
-                }
+                Console.WriteLine("Enter the ID of the book to return!");
+                int bookid = int.Parse(Console.ReadLine());
+                Console.WriteLine("Please enter the amount of days you have had this book for.");
+                int days = int.Parse(Console.ReadLine());
+                int surcharge = price.calculatePrice(bookid, days);
+                if (surcharge == 0) { Console.WriteLine("You have returned this book within 30 days, so there is no charge. :)"); }
+                else { Console.WriteLine("Your calculated surcharge: {0}", surcharge); }
+                br.ReturnBook(memberid, bookid);
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
                 goto REPICK;
@@ -198,7 +204,7 @@ namespace konyvtar
             //check borrowed
             if(action == 8)
             {
-                Price price = new Price();
+
                 Console.WriteLine("You have chosen to check what books you currently have!");
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
@@ -232,6 +238,18 @@ namespace konyvtar
                 goto REPICK;
             }
 
+            //information about surcharge
+            if(action == 10) {
+                INFO:
+                Console.WriteLine("_________________________________________");
+                Console.WriteLine();
+                Console.WriteLine("After 30 days of not returning a borrowed book, you will be charged.");
+                Console.WriteLine("The exact amount depends on the genre and availability on the book,");
+                Console.WriteLine("as well as the amount of days spent before returning.");
+                Console.WriteLine("_________________________________________");
+                Console.WriteLine();
+                goto REPICK;
+            }
             //debug
             /*
             List<Book> books = new List<Book>();

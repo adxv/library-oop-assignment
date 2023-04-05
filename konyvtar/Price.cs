@@ -37,5 +37,31 @@ namespace konyvtar
             }
             return price;
         }
+
+        public int calculatePrice(int bookid, int days)
+        {
+            Book bookToCheck = Library.books.Find(book => book.Id == bookid);
+            int calculatedprice = 0;
+
+            if(days > 30)
+            {
+                calculatedprice = priceCheck(bookid) * 2;
+                return calculatedprice;
+            }
+            if (days > 40)
+            {
+                calculatedprice = priceCheck(bookid) * 3;
+                return calculatedprice;
+            }
+            if (days > 50)
+            {
+                calculatedprice = priceCheck(bookid) * 4;
+                return calculatedprice;
+            }
+            else
+            {
+                return calculatedprice;
+            }
+        }
     }
 }
