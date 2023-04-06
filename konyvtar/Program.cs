@@ -35,7 +35,8 @@ namespace konyvtar
             Console.WriteLine("8. Check what books you currently have!");
             Console.WriteLine("9. Remove a book");
             Console.WriteLine("10. Information about the surcharge");
-            Console.WriteLine("11. or 'exit': Exit");
+            Console.WriteLine("11. Test surcharge calculation (Canvas követelmény)");
+            Console.WriteLine("12. or 'exit': Exit");
             Console.WriteLine("_________________________________________");
             REPICK:
             Console.WriteLine("Please choose from the options above or type 'help' for instructions!");
@@ -45,8 +46,8 @@ namespace konyvtar
             if (prompt == "help") { goto HELP; }
             if (prompt == "exit") { return; }
             bool ok = int.TryParse(prompt, out int action);
-            if (!ok || action < 1 || action > 11) { goto REPICK; }
-            if (action == 11) { return; }
+            if (!ok || action < 1 || action > 12) { goto REPICK; }
+            if (action == 12) { return; }
 
             //TODO:
                 //MAKE ID AUTOMATIC
@@ -240,7 +241,6 @@ namespace konyvtar
 
             //information about surcharge
             if(action == 10) {
-                INFO:
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
                 Console.WriteLine("After 30 days of not returning a borrowed book, you will be charged.");
@@ -250,6 +250,24 @@ namespace konyvtar
                 Console.WriteLine();
                 goto REPICK;
             }
+
+            //test surcharge system
+            if(action == 11)
+            {
+                Console.WriteLine("_________________________________________");
+                Console.WriteLine();
+                Console.WriteLine("Enter the ID of the book to check the price of!");
+                int bookid = int.Parse(Console.ReadLine());
+                Console.WriteLine("Please enter the amount of days!");
+                int days = int.Parse(Console.ReadLine());
+                int surcharge = price.calculatePrice(bookid, days);
+                if (surcharge == 0) { Console.WriteLine("You have returned this book within 30 days, so there is no charge. :)"); }
+                else { Console.WriteLine("Your calculated surcharge: {0}", surcharge); }
+                Console.WriteLine("_________________________________________");
+                Console.WriteLine();
+                goto REPICK;
+            }
+
             //debug
             /*
             List<Book> books = new List<Book>();
