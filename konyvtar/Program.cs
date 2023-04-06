@@ -15,7 +15,6 @@ namespace konyvtar
             //menu
             
             ReadFile reader = new ReadFile();
-            WriteFile writer = new WriteFile();
             reader.ReadFromFile();
 
             BorrowReturn br = new BorrowReturn();
@@ -32,10 +31,10 @@ namespace konyvtar
             Console.WriteLine("5. List books");
             Console.WriteLine("6. List available books");
             Console.WriteLine("7. List members");
-            Console.WriteLine("8. Check what books you currently have!");
+            Console.WriteLine("8. Check what books you currently have");
             Console.WriteLine("9. Remove a book");
             Console.WriteLine("10. Information about the surcharge");
-            Console.WriteLine("11. Test surcharge calculation (Canvas követelmény)");
+            Console.WriteLine("11. Test mode (Canvas követelmény)");
             Console.WriteLine("12. or 'exit': Exit");
             Console.WriteLine("_________________________________________");
             REPICK:
@@ -49,10 +48,6 @@ namespace konyvtar
             if (!ok || action < 1 || action > 12) { goto REPICK; }
             if (action == 12) { return; }
 
-            //TODO:
-                //MAKE ID AUTOMATIC
-                
-
             //DONE
                 //ASSIGN BOOKS TO MEMBERS
                 //STORE MEMBERS IN FILE
@@ -62,6 +57,7 @@ namespace konyvtar
             //newbook
             if (action == 1)
             {
+                ManageBook newBook = new ManageBook();
                 Console.WriteLine("You have chosen to obtain a new book! Please input the information in order!");
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
@@ -82,8 +78,7 @@ namespace konyvtar
                 Console.WriteLine("Rarity: (rare OR common)");
                 string rarity = Console.ReadLine();
 
-                Library.books.Add(new Book(id, title, author, publisher, isbn, pages, true, genre, rarity));
-                writer.WriteBookToFile(new Book(id, title, author, publisher, isbn, pages, true, genre, rarity));
+                newBook.addNewBook(id, title, author, publisher, isbn, pages, genre, rarity);
                 Console.WriteLine();
                 Console.WriteLine("The book has been added to the database!");
                 Console.WriteLine("_________________________________________");
@@ -94,6 +89,7 @@ namespace konyvtar
             //signup
             if (action == 2)
             {
+                NewMember newMember = new NewMember();
                 Console.WriteLine("You have chosen to sign up a new member!");
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
@@ -101,8 +97,7 @@ namespace konyvtar
                 int id = int.Parse(Console.ReadLine());
                 Console.WriteLine("Please enter the Name!");
                 string name = Console.ReadLine();
-                Library.members.Add(new Member(id, name, new List<Book>()));
-                writer.WriteUserToFile(new Member(id, name, new List<Book>()));
+                newMember.signUp(id, name);
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
                 goto REPICK;
@@ -228,6 +223,7 @@ namespace konyvtar
             //remove a book
             if(action == 9)
             {
+                WriteFile writer = new WriteFile();
                 Console.WriteLine("You have chosen to remove a book!");
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
@@ -251,7 +247,7 @@ namespace konyvtar
                 goto REPICK;
             }
 
-            //test surcharge system
+            //test mode
             if(action == 11)
             {
                 Console.WriteLine("_________________________________________");
