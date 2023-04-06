@@ -8,7 +8,7 @@ namespace konyvtar
 {
     internal class NewMember
     {
-        public void signUp(int id, string name)
+        public void SignUp(int id, string name)
         {
             WriteFile writer = new WriteFile();
             Library.members.Add(new Member(id, name, new List<Book>()));

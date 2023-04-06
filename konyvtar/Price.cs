@@ -8,7 +8,7 @@ namespace konyvtar
 {
     internal class Price
     {
-        public int priceCheck(int bookid)
+        public int PriceCheck(int bookid)
         {
             Book bookToCheck = Library.books.Find(book => book.Id == bookid);
             int price = 0;
@@ -45,17 +45,17 @@ namespace konyvtar
 
             if(days > 30)
             {
-                calculatedprice = priceCheck(bookid) * 2;
+                calculatedprice = PriceCheck(bookid) * 2;
                 return calculatedprice;
             }
             if (days > 40)
             {
-                calculatedprice = priceCheck(bookid) * 3;
+                calculatedprice = PriceCheck(bookid) * 3;
                 return calculatedprice;
             }
             if (days > 50)
             {
-                calculatedprice = priceCheck(bookid) * 4;
+                calculatedprice = PriceCheck(bookid) * 4;
                 return calculatedprice;
             }
             else

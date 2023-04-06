@@ -78,7 +78,7 @@ namespace konyvtar
                 Console.WriteLine("Rarity: (rare OR common)");
                 string rarity = Console.ReadLine();
 
-                newBook.addNewBook(id, title, author, publisher, isbn, pages, genre, rarity);
+                newBook.AddNewBook(id, title, author, publisher, isbn, pages, genre, rarity);
                 Console.WriteLine();
                 Console.WriteLine("The book has been added to the database!");
                 Console.WriteLine("_________________________________________");
@@ -97,7 +97,7 @@ namespace konyvtar
                 int id = int.Parse(Console.ReadLine());
                 Console.WriteLine("Please enter the Name!");
                 string name = Console.ReadLine();
-                newMember.signUp(id, name);
+                newMember.SignUp(id, name);
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
                 goto REPICK;
@@ -209,7 +209,7 @@ namespace konyvtar
                 Member member = Library.members.Find(x => x.Id == memberid);
                 foreach (Book book in  member.BooksBorrowed)
                 {
-                    Console.WriteLine("Lib-ID: {0}, Title: {1}, Author: {2}, surcharge: {3}", book.Id, book.Title, book.Author, price.priceCheck(book.Id));
+                    Console.WriteLine("Lib-ID: {0}, Title: {1}, Author: {2}, surcharge: {3}", book.Id, book.Title, book.Author, price.PriceCheck(book.Id));
                 }
                 if(member.BooksBorrowed.Count == 0)
                 {
