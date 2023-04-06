@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace konyvtar
 {
-    internal class ManageFile
+    public class ManageFile
     {
         public void ReadFromFile()
         {

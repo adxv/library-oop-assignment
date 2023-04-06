@@ -59,19 +59,24 @@ namespace konyvtar
             Book bookToCheck = Library.books.Find(book => book.Id == bookid);
             int calculatedprice = 0;
 
-            if (days > 30)
+            if (days > -1)
+            {
+                calculatedprice = PriceCheck(bookid);
+                return calculatedprice;
+            }
+            if (days > 1)
             {
                 calculatedprice = PriceCheck(bookid) * 2;
                 return calculatedprice;
             }
-            if (days > 40)
+            if (days > 30)
             {
-                calculatedprice = PriceCheck(bookid) * 3;
+                calculatedprice = PriceCheck(bookid) * 4;
                 return calculatedprice;
             }
             if (days > 50)
             {
-                calculatedprice = PriceCheck(bookid) * 4;
+                calculatedprice = PriceCheck(bookid) * 6;
                 return calculatedprice;
             }
             else
