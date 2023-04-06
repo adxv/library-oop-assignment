@@ -13,12 +13,10 @@ namespace konyvtar
         {
 
             //menu
-            
-            ReadFile reader = new ReadFile();
+            ManageFile reader = new ManageFile();
             reader.ReadFromFile();
 
             BorrowReturn br = new BorrowReturn();
-            Price price = new Price();
 
 
             HELP:
@@ -57,7 +55,6 @@ namespace konyvtar
             //newbook
             if (action == 1)
             {
-                ManageBook newBook = new ManageBook();
                 Console.WriteLine("You have chosen to obtain a new book! Please input the information in order!");
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
@@ -78,7 +75,7 @@ namespace konyvtar
                 Console.WriteLine("Rarity: (rare OR common)");
                 string rarity = Console.ReadLine();
 
-                newBook.AddNewBook(id, title, author, publisher, isbn, pages, genre, rarity);
+                Library.AddNewBook(id, title, author, publisher, isbn, pages, genre, rarity);
                 Console.WriteLine();
                 Console.WriteLine("The book has been added to the database!");
                 Console.WriteLine("_________________________________________");
@@ -89,7 +86,6 @@ namespace konyvtar
             //signup
             if (action == 2)
             {
-                NewMember newMember = new NewMember();
                 Console.WriteLine("You have chosen to sign up a new member!");
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
@@ -97,7 +93,7 @@ namespace konyvtar
                 int id = int.Parse(Console.ReadLine());
                 Console.WriteLine("Please enter the Name!");
                 string name = Console.ReadLine();
-                newMember.SignUp(id, name);
+                Library.SignUp(id, name);
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
                 goto REPICK;
@@ -133,7 +129,7 @@ namespace konyvtar
                 int bookid = int.Parse(Console.ReadLine());
                 Console.WriteLine("Please enter the amount of days you have had this book for.");
                 int days = int.Parse(Console.ReadLine());
-                int surcharge = price.calculatePrice(bookid, days);
+                int surcharge = Library.CalculatePrice(bookid, days);
                 if (surcharge == 0) { Console.WriteLine("You have returned this book within 30 days, so there is no charge. :)"); }
                 else { Console.WriteLine("Your calculated surcharge: {0}", surcharge); }
                 br.ReturnBook(memberid, bookid);
@@ -209,7 +205,7 @@ namespace konyvtar
                 Member member = Library.members.Find(x => x.Id == memberid);
                 foreach (Book book in  member.BooksBorrowed)
                 {
-                    Console.WriteLine("Lib-ID: {0}, Title: {1}, Author: {2}, surcharge: {3}", book.Id, book.Title, book.Author, price.PriceCheck(book.Id));
+                    Console.WriteLine("Lib-ID: {0}, Title: {1}, Author: {2}, surcharge: {3}", book.Id, book.Title, book.Author, Library.PriceCheck(book.Id));
                 }
                 if(member.BooksBorrowed.Count == 0)
                 {
@@ -223,13 +219,12 @@ namespace konyvtar
             //remove a book
             if(action == 9)
             {
-                WriteFile writer = new WriteFile();
                 Console.WriteLine("You have chosen to remove a book!");
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
                 Console.WriteLine("Enter the ID of the book to be removed!");
                 int remove = int.Parse(Console.ReadLine());
-                writer.RemoveBook(remove);
+                ManageFile.RemoveBook(remove);
                 Console.WriteLine("_________________________________________");
                 Console.WriteLine();
                 goto REPICK;
@@ -256,7 +251,7 @@ namespace konyvtar
                 int bookid = int.Parse(Console.ReadLine());
                 Console.WriteLine("Please enter the amount of days!");
                 int days = int.Parse(Console.ReadLine());
-                int surcharge = price.calculatePrice(bookid, days);
+                int surcharge = Library.CalculatePrice(bookid, days);
                 if (surcharge == 0) { Console.WriteLine("You have returned this book within 30 days, so there is no charge. :)"); }
                 else { Console.WriteLine("Your calculated surcharge: {0}", surcharge); }
                 Console.WriteLine("_________________________________________");

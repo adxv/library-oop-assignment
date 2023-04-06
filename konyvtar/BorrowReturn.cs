@@ -19,8 +19,6 @@ namespace konyvtar
                 bookToBorrow.Available = false;
                 borrowingMember.BooksBorrowed.Add(bookToBorrow);
 
-
-
                 //rewrite books.txt
                 using (StreamWriter sw = new StreamWriter("books.txt"))
                 {
@@ -55,6 +53,7 @@ namespace konyvtar
             }
 
         }
+
         public void ReturnBook(int memberid, int bookid)
         {
             //find the book with the specified ID
